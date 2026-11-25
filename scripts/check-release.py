@@ -10,6 +10,7 @@ import tomllib
 def validate(root, environment):
     manifest = json.loads((root / "plugin.json").read_text())
     version = manifest["version"]
+    marketplace = json.loads((root / ".agents/plugins/marketplace.json").read_text())
     package_lock = json.loads((root / "package-lock.json").read_text())
     cargo_lock = tomllib.loads((root / "Cargo.lock").read_text())
     versions = [
@@ -19,6 +20,7 @@ def validate(root, environment):
         package_lock["packages"][""]["version"],
         tomllib.loads((root / "Cargo.toml").read_text())["package"]["version"],
         next(package["version"] for package in cargo_lock["package"] if package["name"] == manifest["name"]),
+        next(plugin["version"] for plugin in marketplace["plugins"] if plugin["name"] == manifest["name"]),
     ]
     if not re.fullmatch(r"\d+\.\d+\.\d+", version) or any(value != version for value in versions):
         raise SystemExit("Package versions must agree and use a numeric major.minor.patch version")

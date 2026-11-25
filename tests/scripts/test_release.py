@@ -146,7 +146,7 @@ class ReleaseTests(unittest.TestCase):
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
         subprocess.run(["git", "clone", "--shared", "--no-checkout", "--quiet", str(ROOT), str(self.root)], check=True)
-        for name in ["plugin.json", ".claude-plugin/plugin.json", "package.json", "package-lock.json", "Cargo.toml", "Cargo.lock"]:
+        for name in ["plugin.json", ".claude-plugin/plugin.json", ".agents/plugins/marketplace.json", "package.json", "package-lock.json", "Cargo.toml", "Cargo.lock"]:
             destination = self.root / name
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / name, destination)
@@ -182,7 +182,7 @@ class ReleaseTests(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit, "exact release tag"):
             release.validate(self.root, {"REVIT_RELEASE_TAG": "main"})
 
-    def test_native_host_and_every_lockfile_version_are_checked(self):
+    def test_native_host_and_package_versions_are_checked(self):
         host = next(line.removeprefix("host: ") for line in subprocess.check_output(["rustc", "-vV"], text=True).splitlines() if line.startswith("host: "))
         release.validate(self.root, {"REVIT_RELEASE_TARGET": host})
         with self.assertRaisesRegex(SystemExit, "Expected native Rust host"):
@@ -190,6 +190,13 @@ class ReleaseTests(unittest.TestCase):
         filename = self.root / "package-lock.json"
         value = json.loads(filename.read_text())
         value["packages"][""]["version"] = "999.0.0"
+        filename.write_text(json.dumps(value))
+        with self.assertRaisesRegex(SystemExit, "versions must agree"):
+            release.validate(self.root, {})
+        shutil.copyfile(ROOT / "package-lock.json", filename)
+        filename = self.root / ".agents/plugins/marketplace.json"
+        value = json.loads(filename.read_text())
+        value["plugins"][0]["version"] = "999.0.0"
         filename.write_text(json.dumps(value))
         with self.assertRaisesRegex(SystemExit, "versions must agree"):
             release.validate(self.root, {})

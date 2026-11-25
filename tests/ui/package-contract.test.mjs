@@ -32,7 +32,6 @@ test('portable and compatibility manifests resolve the same contained page and i
   assert.equal(marketplace.plugins.length, 1);
   assert.equal(entry.name, primary.name);
   assert.equal(entry.displayName, jaz.displayName);
-  assert.equal(entry.version, primary.version);
   assert.equal(entry.source, './');
 });
 
