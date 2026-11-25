@@ -1,0 +1,24 @@
+{
+  "name": "revit-view-extract-ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "node scripts/build-views.mjs",
+    "test": "node --test tests/ui/*.test.mjs",
+    "check": "npm run build && npm test",
+    "preview": "node scripts/preview.mjs",
+    "package": "python3 scripts/package.py"
+  },
+  "dependencies": {
+    "three": "0.186.1"
+  },
+  "devDependencies": {
+    "esbuild": "0.27.0",
+    "linkedom": "0.18.12"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

@@ -1,0 +1,10 @@
+/target/
+/runs/
+/node_modules/
+*.rvt
+*.rfa
+*.gltf
+*.glb
+*.local.json
+/private/
+.DS_Store

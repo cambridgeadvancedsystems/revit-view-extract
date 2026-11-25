@@ -1,0 +1,17 @@
+{
+  "name": "revit-view-extract",
+  "version": "0.1.0",
+  "description": "Read local Revit engineering data and explore saved meshes with linked element properties.",
+  "license": "Apache-2.0",
+  "displayName": "Revit View Extract",
+  "page": {
+    "view": "viewer"
+  },
+  "logo": "./assets/icon.svg",
+  "category": "engineering",
+  "repository": "https://github.com/cambridgeadvancedsystems/revit-view-extract",
+  "homepage": "https://github.com/cambridgeadvancedsystems/revit-view-extract",
+  "author": {
+    "name": "Revit View Extract contributors"
+  }
+}

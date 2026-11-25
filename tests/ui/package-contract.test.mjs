@@ -1,0 +1,41 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile, stat } from 'node:fs/promises';
+import path from 'node:path';
+import { Script } from 'node:vm';
+import { fileURLToPath } from 'node:url';
+
+const root = fileURLToPath(new URL('../../', import.meta.url));
+const json = async name => JSON.parse(await readFile(path.join(root, name), 'utf8'));
+
+test('portable and compatibility manifests resolve the same contained page and icon', async () => {
+  const primary = await json('plugin.json');
+  const compatibility = await json('.claude-plugin/plugin.json');
+  const jaz = primary.extensions['chat.jaz'];
+  assert.equal(primary.$schema, 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json');
+  assert.equal(primary.name, compatibility.name);
+  assert.equal(primary.version, compatibility.version);
+  assert.equal(jaz.displayName, compatibility.displayName);
+  assert.equal(jaz.icon, compatibility.logo);
+  assert.equal(compatibility.category, 'engineering');
+  assert.deepEqual(Object.keys(jaz).sort(), ['displayName', 'icon', 'page']);
+  assert.deepEqual(jaz.page, compatibility.page);
+  assert.match(jaz.icon, /^\.\/assets\/[a-z.-]+\.svg$/);
+  assert.ok((await stat(path.join(root, jaz.icon))).size < 512 * 1024);
+  assert.ok((await readFile(path.join(root, jaz.icon), 'utf8')).includes('currentColor'));
+  assert.ok((await stat(path.join(root, `views/${jaz.page.view}.html`))).isFile());
+  assert.equal((await json('.agents/plugins/marketplace.json')).plugins[0].source, './');
+});
+
+test('both shipped HTML bundles compile and have no package-relative runtime dependencies', async () => {
+  for (const name of ['viewer', 'inspector']) {
+    const html = await readFile(path.join(root, `views/${name}.html`), 'utf8');
+    const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)];
+    assert.equal(scripts.length, 1);
+    assert.doesNotThrow(() => new Script(scripts[0][1]));
+    assert.equal(html.includes('/* SCRIPT */'), false);
+    assert.equal(html.includes('/* STYLE */'), false);
+    assert.doesNotMatch(html, /<script[^>]*\bsrc=|<link[^>]*\bhref=/i);
+    assert.ok(html.includes(`data-view="${name}"`));
+  }
+});

@@ -1,0 +1,3 @@
+* text=auto eol=lf
+views/*.html linguist-generated -whitespace
+third_party/rust-NOTICES.txt -whitespace

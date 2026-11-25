@@ -1,0 +1,19 @@
+Revit View Extract
+Copyright 2026 Revit View Extract contributors
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This product includes rvt-rs by Griffin Long under Apache-2.0.
+Its original license and notices are retained at third_party/rvt-rs-LICENSE
+and third_party/rvt-rs-NOTICE. Its runtime dependencies retain their own
+compatible permissive licenses; the resolved Rust dependency inventory and
+original license texts are retained at third_party/rust-dependencies.json
+and third_party/rust-NOTICES.txt.
+
+The viewer includes three.js 0.186.1 under the MIT License.
+Copyright 2010-2026 three.js authors. Its original license is retained at
+assets/licenses/three-MIT.txt. Third-party components retain their own
+licenses; the project's Apache-2.0 license does not replace them.
+
+Autodesk and Revit are trademarks of Autodesk, Inc. This independent
+interoperability project is not affiliated with or endorsed by Autodesk.

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Revit View Extract</title><style>/* STYLE */</style></head>
+<body data-view="VIEW_NAME">
+<header>
+  <div><h1 id="source-name">Revit View Extract</h1><p id="source-summary">Engineering data and saved geometry, together.</p></div>
+  <div class="toolbar">
+    <select id="model" aria-label="Model" hidden></select>
+    <button id="choose-json" type="button">Open JSON</button>
+    <button id="choose-rvt" type="button">Extract Revit file</button>
+    <button id="other-view" type="button">OTHER_VIEW_LABEL</button>
+    <button id="open-thread" type="button" hidden>Open thread</button>
+  </div>
+</header>
+<p id="mesh-status" class="status-message" role="status" aria-live="polite">Open a local export to begin.</p>
+<main class="main">
+  <section class="model-column" aria-label="Model and element list">
+    <div class="model-tools">
+      <button id="fit" type="button" disabled>Fit model</button>
+      <button id="show-all" type="button">Show all</button>
+      <label><input id="wireframe" type="checkbox" disabled> Wireframe</label>
+    </div>
+    <div class="stage"><div id="viewport"></div></div>
+    <section class="element-panel" aria-label="Elements">
+      <div class="panel-heading"><h2>Elements</h2><span id="element-count"></span></div>
+      <div class="filters"><input id="element-search" type="search" aria-label="Search elements" placeholder="Search name, ID or value"><select id="category" aria-label="Filter category"><option value="">All categories</option></select></div>
+      <div id="elements"></div>
+      <p id="element-empty" class="empty">No matching elements. Clear your filters or open an export.</p>
+      <p id="list-limit" hidden>Showing the first 300 matches. Search to narrow the list.</p>
+    </section>
+  </section>
+  <aside class="inspector" aria-label="Element properties">
+    <div class="selection"><h2 id="selected-name">Select an element</h2><p id="selected-meta">Pick a mesh or choose an element below.</p><div class="toolbar"><button id="focus" type="button" disabled>Focus</button><button id="isolate" type="button" aria-pressed="false" disabled>Isolate</button></div></div>
+    <div class="property-filter"><input id="property-search" type="search" aria-label="Search properties" placeholder="Search properties or values"></div>
+    <div class="property-caption"><span>Properties</span><span id="property-count"></span></div>
+    <div class="table-wrap"><table aria-label="Element property values"><tbody id="properties"></tbody></table><p id="property-empty" class="empty">Element properties will appear here.</p></div>
+  </aside>
+</main>
+<input class="file-input" id="json-file" type="file" accept=".json,application/json" aria-label="Choose JSON export">
+<input class="file-input" id="rvt-file" type="file" accept=".rvt" aria-label="Choose Revit file">
+<script>/* SCRIPT */</script>
+</body></html>

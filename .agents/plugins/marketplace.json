@@ -1,0 +1,9 @@
+{
+  "name": "revit-view-extract",
+  "plugins": [
+    {
+      "name": "revit-view-extract",
+      "source": "./"
+    }
+  ]
+}

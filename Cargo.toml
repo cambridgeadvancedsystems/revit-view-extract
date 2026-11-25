@@ -1,0 +1,31 @@
+[package]
+name = "revit-view-extract"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+license = "Apache-2.0"
+description = "Local Revit 2024 engineering and mesh extraction"
+
+[lib]
+name = "revit_view_extract"
+
+[[bin]]
+name = "revit-view-extract"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1"
+flate2 = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+clap = { version = "4", features = ["derive"] }
+encoding_rs = "0.8"
+csv = "1"
+base64 = "0.22"
+rvt = { git = "https://github.com/DrunkOnJava/rvt-rs", rev = "eb268fdd22ced8e43bf8b2236b582f182880a2d8", features = ["unstable-research"] }
+
+[profile.dev]
+debug = 0
+
+[profile.release]
+strip = true

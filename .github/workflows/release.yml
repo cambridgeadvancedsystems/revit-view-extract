@@ -1,0 +1,125 @@
+name: Build platform plugin archives
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Exact existing version tag, required to publish
+        type: string
+        default: ''
+      publish:
+        description: Publish all five reviewed platform ZIPs as a GitHub release
+        type: boolean
+        default: false
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+      commit: ${{ steps.version.outputs.commit }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - id: version
+        run: python scripts/check-release.py
+        env:
+          REVIT_RELEASE_TAG: ${{ inputs.tag || (github.ref_type == 'tag' && github.ref_name) || '' }}
+          REVIT_RELEASE_PUBLISH: ${{ inputs.publish || false }}
+          REVIT_RELEASE_REF_TYPE: ${{ github.ref_type }}
+  package:
+    needs: validate
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15
+            target: aarch64-apple-darwin
+            executable: revit-view-extract
+          - runner: macos-15-intel
+            target: x86_64-apple-darwin
+            executable: revit-view-extract
+          - runner: ubuntu-24.04
+            target: x86_64-unknown-linux-gnu
+            executable: revit-view-extract
+          - runner: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-gnu
+            executable: revit-view-extract
+          - runner: windows-2022
+            target: x86_64-pc-windows-msvc
+            executable: revit-view-extract.exe
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.validate.outputs.commit }}
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify native host and package versions
+        run: python scripts/check-release.py
+        env:
+          REVIT_RELEASE_TARGET: ${{ matrix.target }}
+      - run: npm ci --no-audit --no-fund
+      - run: npm run check
+      - run: python -m unittest discover -s tests/scripts
+      - run: git diff --exit-code -- views/ assets/licenses/
+      - run: cargo test --locked --all-targets
+      - run: python scripts/build-release.py --target ${{ matrix.target }}
+      - run: python scripts/package.py --binary target/${{ matrix.target }}/release/${{ matrix.executable }} --target ${{ matrix.target }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: revit-view-extract-${{ matrix.target }}
+          path: |
+            runs/releases/*.zip
+            runs/releases/*.sha256
+          if-no-files-found: error
+  publish:
+    if: github.event_name == 'workflow_dispatch' && inputs.publish
+    needs: [validate, package]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.validate.outputs.commit }}
+          fetch-depth: 0
+      - name: Recheck the selected release tag
+        run: python scripts/check-release.py
+        env:
+          REVIT_RELEASE_TAG: ${{ needs.validate.outputs.tag }}
+          REVIT_RELEASE_PUBLISH: 'true'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: revit-view-extract-*
+          merge-multiple: true
+          path: runs/releases
+      - name: Verify all five archives and checksums
+        shell: bash
+        run: |
+          test "$(find runs/releases -maxdepth 1 -name '*.zip' | wc -l)" -eq 5
+          test "$(find runs/releases -maxdepth 1 -name '*.sha256' | wc -l)" -eq 5
+          cd runs/releases
+          sha256sum --check *.sha256
+      - name: Publish the explicitly selected tag
+        shell: bash
+        run: gh release create "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --verify-tag --title "Revit View Extract $RELEASE_VERSION" --notes-file docs/release-notes.md runs/releases/*.zip runs/releases/*.sha256
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ needs.validate.outputs.tag }}
+          RELEASE_VERSION: ${{ needs.validate.outputs.version }}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "revit-view-extract",
+  "version": "0.1.0",
+  "description": "Read local Revit engineering data and explore saved meshes with linked element properties.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "revit",
+    "bim",
+    "engineering",
+    "mesh",
+    "local"
+  ],
+  "extensions": {
+    "chat.jaz": {
+      "displayName": "Revit View Extract",
+      "icon": "./assets/icon.svg",
+      "page": {
+        "view": "viewer"
+      }
+    }
+  },
+  "repository": "https://github.com/cambridgeadvancedsystems/revit-view-extract",
+  "homepage": "https://github.com/cambridgeadvancedsystems/revit-view-extract"
+}
