@@ -38,7 +38,7 @@ class PackageTests(unittest.TestCase):
         self.root = Path(self.temporary.name)
         for directory in ["assets", "skills", "docs", "third_party", ".claude-plugin", "views", "bin"]:
             (self.root / directory).mkdir()
-        (self.root / "plugin.json").write_text(json.dumps({"name": "revit-view-extract", "version": "0.1.0"}))
+        (self.root / "plugin.json").write_text(json.dumps({"name": "revit-view-extract", "version": "0.1.1"}))
         for name in [".claude-plugin/plugin.json", "README.md", "LICENSE", "NOTICE", "views/viewer.html", "views/inspector.html", "third_party/rust-NOTICES.txt", "third_party/rust-dependencies.json"]:
             (self.root / name).write_text(name)
         (self.root / "assets/licenses").mkdir()
@@ -134,7 +134,7 @@ class PackageTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Missing package input"):
             self.build()
         (self.root / "LICENSE").write_text("license")
-        (self.root / "plugin.json").write_text(json.dumps({"name": "../escape", "version": "0.1.0"}))
+        (self.root / "plugin.json").write_text(json.dumps({"name": "../escape", "version": "0.1.1"}))
         with self.assertRaisesRegex(ValueError, "Unsafe package"):
             self.build()
         self.assertFalse(list(self.output.glob("*.zip")))

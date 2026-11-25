@@ -3,7 +3,7 @@ name: revit-view-extract
 description: Extract engineering data and saved meshes from local Revit 2024 RVT files; inspect circuits, panels, HVAC equipment, rooms, sheets and element properties in an interactive local viewer. Use when opening or analysing an RVT model or producing a linked model and property view in Jaz.
 ---
 
-# Revit View Extract
+# Revit Viewer
 
 Keep source models and derived data local. Never upload them or add them to a repository. This reader supports Revit 2024; do not imply that every Revit version, family or saved geometry cache is supported. Read the CLI's diagnostics and distinguish extracted facts from unavailable data.
 

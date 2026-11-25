@@ -11,10 +11,14 @@ const json = async name => JSON.parse(await readFile(path.join(root, name), 'utf
 test('portable and compatibility manifests resolve the same contained page and icon', async () => {
   const primary = await json('plugin.json');
   const compatibility = await json('.claude-plugin/plugin.json');
+  const marketplace = await json('.agents/plugins/marketplace.json');
+  const [entry] = marketplace.plugins;
   const jaz = primary.extensions['chat.jaz'];
   assert.equal(primary.$schema, 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json');
+  assert.equal(primary.name, 'revit-view-extract');
   assert.equal(primary.name, compatibility.name);
   assert.equal(primary.version, compatibility.version);
+  assert.equal(jaz.displayName, 'Revit Viewer');
   assert.equal(jaz.displayName, compatibility.displayName);
   assert.equal(jaz.icon, compatibility.logo);
   assert.equal(compatibility.category, 'engineering');
@@ -24,7 +28,12 @@ test('portable and compatibility manifests resolve the same contained page and i
   assert.ok((await stat(path.join(root, jaz.icon))).size < 512 * 1024);
   assert.ok((await readFile(path.join(root, jaz.icon), 'utf8')).includes('currentColor'));
   assert.ok((await stat(path.join(root, `views/${jaz.page.view}.html`))).isFile());
-  assert.equal((await json('.agents/plugins/marketplace.json')).plugins[0].source, './');
+  assert.equal(marketplace.name, primary.name);
+  assert.equal(marketplace.plugins.length, 1);
+  assert.equal(entry.name, primary.name);
+  assert.equal(entry.displayName, jaz.displayName);
+  assert.equal(entry.version, primary.version);
+  assert.equal(entry.source, './');
 });
 
 test('both shipped HTML bundles compile and have no package-relative runtime dependencies', async () => {
@@ -37,5 +46,7 @@ test('both shipped HTML bundles compile and have no package-relative runtime dep
     assert.equal(html.includes('/* STYLE */'), false);
     assert.doesNotMatch(html, /<script[^>]*\bsrc=|<link[^>]*\bhref=/i);
     assert.ok(html.includes(`data-view="${name}"`));
+    assert.ok(html.includes('<title>Revit Viewer</title>'));
+    assert.ok(html.includes('<h1 id="source-name">Revit Viewer</h1>'));
   }
 });

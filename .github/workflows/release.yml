@@ -118,7 +118,7 @@ jobs:
           sha256sum --check *.sha256
       - name: Publish the explicitly selected tag
         shell: bash
-        run: gh release create "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --verify-tag --title "Revit View Extract $RELEASE_VERSION" --notes-file docs/release-notes.md runs/releases/*.zip runs/releases/*.sha256
+        run: gh release create "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --verify-tag --title "Revit Viewer $RELEASE_VERSION" --notes-file docs/release-notes.md runs/releases/*.zip runs/releases/*.sha256
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ needs.validate.outputs.tag }}

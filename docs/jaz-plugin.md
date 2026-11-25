@@ -1,6 +1,6 @@
 # Using the Jaz plugin
 
-Revit View Extract runs on the Jaz backend machine. Native ZIPs include the executable, extraction skill, model viewer and element inspector. Source and Marketplace installations include Rust source and bundled views; the skill builds the executable with Cargo on first use.
+Revit Viewer runs on the Jaz backend machine. Native ZIPs include the executable, extraction skill, model viewer and element inspector. Source and Marketplace installations include Rust source and bundled views; the skill builds the executable with Cargo on first use.
 
 ## Install
 
@@ -9,7 +9,7 @@ Choose the archive matching the backend's operating system and architecture from
 For Jaz's default runtime directory, macOS / Linux:
 
 ```sh
-unzip ./revit-view-extract-0.1.0-aarch64-apple-darwin.zip -d "$HOME/.jaz/plugins"
+unzip ./revit-view-extract-0.1.1-aarch64-apple-darwin.zip -d "$HOME/.jaz/plugins"
 chmod +x "$HOME/.jaz/plugins/revit-view-extract/bin/revit-view-extract"
 ```
 
@@ -17,7 +17,7 @@ Use the Intel macOS or Linux archive name when appropriate. Windows PowerShell:
 
 ```powershell
 $revitPluginRoot = Join-Path $env:USERPROFILE '.jaz\plugins'
-Expand-Archive -Path '.\revit-view-extract-0.1.0-x86_64-pc-windows-msvc.zip' -DestinationPath $revitPluginRoot
+Expand-Archive -Path '.\revit-view-extract-0.1.1-x86_64-pc-windows-msvc.zip' -DestinationPath $revitPluginRoot
 ```
 
 Substitute the backend's configured runtime root if it differs. Preserve an existing plugin folder before replacement, then reopen plugin settings or start a new agent session. No account, MCP server, Node or Python runtime is needed to use a native ZIP.

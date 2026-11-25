@@ -1,4 +1,4 @@
-# Revit View Extract
+# Revit Viewer
 
 Read Revit 2024 engineering data and saved mesh geometry locally, without Revit or a cloud upload. The Rust CLI extracts circuits, panels, electrical and HVAC equipment, levels, sheets, schedules, notes and links. A Jaz plugin adds an interactive Three.js model viewer and searchable element properties.
 

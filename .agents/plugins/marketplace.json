@@ -3,7 +3,9 @@
   "plugins": [
     {
       "name": "revit-view-extract",
-      "source": "./"
+      "source": "./",
+      "displayName": "Revit Viewer",
+      "version": "0.1.1"
     }
   ]
 }
