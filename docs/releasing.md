@@ -27,9 +27,9 @@ Use the target matching the compiled binary. Windows uses `python` and `revit-vi
 
 ## Publish
 
-- [ ] Set matching versions in Cargo.toml, plugin.json, the compatibility manifest and package metadata.
+- [ ] Set matching versions in Cargo.toml, Cargo.lock, plugin.json, the compatibility manifest, package metadata and the self-marketplace entry.
 - [ ] Run checks and commit regenerated views with the release source.
-- [ ] Create and push the exact version tag, such as `v0.1.1`.
+- [ ] Create and push the exact version tag, such as `v0.1.2`.
 - [ ] Run **Build platform plugin archives** for that tag with `publish: true`.
 
 Publication requires all five native jobs to pass, the checkout to match the tag, and all expected archives and checksums to verify. Existing releases are not overwritten. The workflow does not create repositories, push branches/tags or update the Marketplace.

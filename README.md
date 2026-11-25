@@ -26,7 +26,7 @@ Ask Jaz to use `revit-view-extract:revit-view-extract` on a local RVT file. The 
 
 **Select `revit-view.model.json` with Open extracted model in each tab.** This local file selection bypasses the current Jaz thread-file API's 1 MiB limit; the complete model never travels through that bridge. A new export invalidates the old imported data. If the backend is another machine, copy the full file to the client first.
 
-The navigation page collects models from threads that presented a file-backed plugin view. Extraction stays on the backend machine; selecting a full model file reads it on the client without uploading it. The UI rejects external mesh assets and performs no runtime network requests.
+Revit Viewer opens on demand in thread side panels and has no left-sidebar navigation entry. Extraction stays on the backend machine; selecting a full model file reads it on the client without uploading it. The UI rejects external mesh assets and performs no runtime network requests.
 
 ## Develop
 

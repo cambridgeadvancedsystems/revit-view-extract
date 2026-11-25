@@ -1,6 +1,6 @@
-# Revit Viewer 0.1.1
+# Revit Viewer 0.1.2
 
-Updated the project display name to Revit Viewer and refreshed its monochrome icon. Repository, package, CLI and schema identifiers remain compatible.
+Revit Viewer opens on demand in thread side panels, with no left-sidebar navigation entry. The model viewer, element inspector, extraction skill, display name and icon remain available. Repository, package, CLI and schema identifiers remain compatible.
 
 Local Revit 2024 engineering and saved-mesh extraction, with a Jaz model viewer and element property inspector.
 

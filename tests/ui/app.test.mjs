@@ -74,7 +74,7 @@ test('live bridge updates drop removed selections and replace model content', as
   h.app.dispose();
 });
 
-test('page models open their associated thread; inspector works without WebGL', async () => {
+test('collection models open their associated thread; inspector works without WebGL', async () => {
   const data = fixture();
   const h = harness({ items: [{ folder: '/one', data, threads: [{ id: 'synthetic-id' }] }, { folder: '/two', data: { ...data, source: { name: 'Second model' } }, threads: [] }] }, 'inspector');
   await Promise.resolve();

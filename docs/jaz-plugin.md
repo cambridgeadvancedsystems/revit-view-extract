@@ -9,7 +9,7 @@ Choose the archive matching the backend's operating system and architecture from
 For Jaz's default runtime directory, macOS / Linux:
 
 ```sh
-unzip ./revit-view-extract-0.1.1-aarch64-apple-darwin.zip -d "$HOME/.jaz/plugins"
+unzip ./revit-view-extract-0.1.2-aarch64-apple-darwin.zip -d "$HOME/.jaz/plugins"
 chmod +x "$HOME/.jaz/plugins/revit-view-extract/bin/revit-view-extract"
 ```
 
@@ -17,7 +17,7 @@ Use the Intel macOS or Linux archive name when appropriate. Windows PowerShell:
 
 ```powershell
 $revitPluginRoot = Join-Path $env:USERPROFILE '.jaz\plugins'
-Expand-Archive -Path '.\revit-view-extract-0.1.1-x86_64-pc-windows-msvc.zip' -DestinationPath $revitPluginRoot
+Expand-Archive -Path '.\revit-view-extract-0.1.2-x86_64-pc-windows-msvc.zip' -DestinationPath $revitPluginRoot
 ```
 
 Substitute the backend's configured runtime root if it differs. Preserve an existing plugin folder before replacement, then reopen plugin settings or start a new agent session. No account, MCP server, Node or Python runtime is needed to use a native ZIP.
@@ -38,7 +38,7 @@ The model view is `revit-view-extract/viewer`; the property view is `revit-view-
 
 The current Jaz thread-file bridge reads up to 1 MiB. The index stays below that limit; the full file is read locally by the browser File API. One file selection is needed whenever a tab opens. A new index invalidates the previously imported file, and the matching export ID prevents opening a stale or different model. If the backend is another machine, copy the full model file to the client before selecting it.
 
-The navigation page collects indexes from threads that showed a file-backed plugin view and links each model back to its thread. Selection and search preferences are saved where Jaz provides view state; geometry and full model data are never stored in those preferences.
+Revit Viewer opens on demand in thread side panels and has no left-sidebar navigation entry. Selection and search preferences are saved where Jaz provides view state; geometry and full model data are never stored in those preferences.
 
 ## Support limits
 

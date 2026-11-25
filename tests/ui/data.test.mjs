@@ -4,7 +4,7 @@ import { normalizeModels, buildElementIndex, filterElements, filterProperties } 
 import { assertEmbeddedGltf, decodeMesh } from '../../views/src/mesh-data.js';
 import { fixture } from './fixture.mjs';
 
-test('thread and navigation page data produce the same engineering index', () => {
+test('thread and collection data produce the same engineering index', () => {
   const value = fixture();
   const [thread] = normalizeModels(value);
   const [page] = normalizeModels({ items: [{ folder: '/synthetic', data: value, threads: [{ id: 'thread-1' }] }] });
@@ -75,7 +75,7 @@ test('IDs above the JavaScript integer range remain lossless through JSON and th
   assert.throws(() => buildElementIndex({ element_index: [{ element_id: Number(id) }] }), /decimal strings/);
 });
 
-test('malformed page items are skipped and valid model keys survive page reordering', () => {
+test('malformed collection items are skipped and valid model keys survive collection reordering', () => {
   const first = { folder: '/first', data: fixture() };
   const second = { folder: '/second', data: fixture() };
   const before = normalizeModels({ items: [null, first, second] });
